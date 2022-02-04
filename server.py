@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
-from kumikolib import Kumiko
 import os
+cwd=os.getcwd()
+import sys
+sys.path.append(cwd) 
+sys.path.append("../")
+from kumikolib import Kumiko
+from lib.panel import Panel
 import time
 import datetime
 from bottle import route, run, template, request, static_file
 import json
 
+
 @route('/detect', method='POST')
 def detect():
-    upload = request.files.get('upload')       
+    upload = request.files.get('upload')
+    right2left = request.forms.get('right2left')
     name, ext = os.path.splitext(upload.filename)
     print(ext.lower())
     if ext.lower() not in ('.png','.jpg','.jpeg'):
@@ -21,8 +28,14 @@ def detect():
     file_path = "{path}/{file}".format(path=save_path, file=savedName)
     if os.path.exists(file_path)==True:
         os.remove(file_path)
-    upload.save(file_path)        
-    kumiko = Kumiko()
+    upload.save(file_path)
+
+    if right2left=="true":
+        kumiko = Kumiko({"rtl":"true"})
+        Panel.set_numbering('rtl')
+    else:
+        kumiko = Kumiko()
+        Panel.set_numbering('ltr')
     infos = []
     infos = kumiko.parse_images([file_path])
     os.remove(file_path)
