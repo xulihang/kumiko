@@ -1,0 +1,5 @@
+bottle==0.12.19
+numpy==1.21.2
+opencv_python==4.5.3.56
+requests==2.26.0
+Paste
