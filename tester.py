@@ -11,11 +11,7 @@ class Tester:
 	
 	files = []
 	git_repo = 'https://framagit.org/nicooo/kumiko'
-	git_versions = [
-		# 'v1.0', 'v1.1', 'v1.1.1', 'v1.2', 'v1.2.1',
-		'v1.3',
-		'current',
-	]
+	git_versions = ['v1.4.1', 'current']
 	
 	def __init__(self, options):
 		self.savedir = os.path.join('tests','results')
@@ -63,7 +59,7 @@ class Tester:
 					if re.search('\.license$',g.name):
 						os.rename(g,os.path.join(tmpfolder.name,os.path.basename(g)))
 			
-			print("##### Kumiko-cutting",f if isinstance(f,str) else f.name,"#####")
+			print("##### Kumiko-cutting {0} ({1}) #####".format(f if isinstance(f,str) else f.name, git_version))
 			
 			subprocess.run(['mkdir','-p',os.path.join(self.savedir,git_version)])
 			jsonfile = os.path.join(self.savedir,git_version,os.path.basename(f)+'.json')
@@ -112,7 +108,7 @@ class Tester:
 			diff_file.write(HTML.nbdiffs(files_diff))
 			
 			for img in files_diff:
-				diff_file.write(HTML.side_by_side_panels(img,files_diff[img]['jsons'],v1,v2,images_dir=files_diff[img]['images_dir'], known_panels=files_diff[img]['known_panels']))
+				diff_file.write(HTML.side_by_side_panels(img,'',files_diff[img]['jsons'],v1,v2,images_dir=files_diff[img]['images_dir'], known_panels=files_diff[img]['known_panels']))
 			
 			diff_file.write(HTML.footer)
 			diff_file.close()
